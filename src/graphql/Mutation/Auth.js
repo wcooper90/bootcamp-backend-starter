@@ -5,7 +5,7 @@ const {
 } = require('../../lib/auth')
 
 
-const login = async (obj, { email, password }, { res }) => {
+const login = async (obj, { email, password }) => {
   const user = await User.query().findOne({
     email,
   })
@@ -24,18 +24,17 @@ const login = async (obj, { email, password }, { res }) => {
     sub: user.id,
   }
   const token = createToken(payload)
-  res.set('x-token', token)
 
   return { user, token }
 }
 
-const register = async (obj, { input: { email, password } }, { res }) => {
-  const passwordHash = await hashPassword(password)
+const register = async (obj, { input: { email, password } }) => {
   const emailExists = await User.query().findOne({ email })
   if (emailExists) {
     throw new UserInputError('Email is already in use')
   }
 
+  const passwordHash = await hashPassword(password)
   const user = await User.query().insertAndFetch({
     email,
     password: passwordHash,
@@ -43,10 +42,9 @@ const register = async (obj, { input: { email, password } }, { res }) => {
 
   // If successful registration, set authentication information
   const payload = {
-    sub: user.id,
+    id: user.id,
   }
   const token = createToken(payload)
-  res.set('x-token', token)
 
   return { user, token }
 }

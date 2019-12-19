@@ -32,7 +32,6 @@ const startServer = async () => {
     origin: true,
     methods: ['GET', 'POST'],
     credentials: true,
-    exposedHeaders: ['x-token'],
     preflightContinue: false,
     optionsSuccessStatus: 200,
   }

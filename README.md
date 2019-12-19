@@ -1,64 +1,32 @@
-# DEV Backend Starter
+# DEV Bootcamp Backend Starter
 
-This is a repository with starter code for new project backends at DEV.
+### Getting Started
 
-**NOTE: When starting a project, update the title and provide a description here for the project. You should also put any engineering-specific information here that you think might be important for future engineers to know (quirks of an API, for example).**
-
-To start a new project built off of this repository, click the green "Use this Template" button.
+To start your project built off of this repository, click the **Fork** button in the top right of the github GUI. This will create a copy of this repository under your account. Share this repository with your team members so that everyone may work off of it.
 
 ### Running the project
 
-Make sure necessary environment variables have been set. Check `src/config/index.js` for supported environment variables. Any that are added to the project should also be added to a pinned message in the project's Slack channel.
+Make sure necessary environment variables have been set, which includes the DB credentials. To create an ElephantSQL database and access the required credentials, see the section on [setting up the development environment](#Set-up-a-development-environment).
 
 ```bash
-npm install
-npm run start
+npm i
+npm run dev
 ```
-
-## Contributing to this project
-
-Please use the workflow and git conventions outlined [here](https://docs.google.com/document/d/1MJUp3kGXOG2ck8phtELk1Ph2AcBFZDMpM9j8dJTCeIw/edit?usp=sharing) when making contributions to this project. The guidelines are designed to increase the long term efficacy of the our engineering efforts, meaning the effort that goes into following these standards today will help save the engineers of tomorrow a considerable amount of time.
-
-## Set up a development environment
-
-- To make development easier, we will use ElephantSQL's free plan to host a different database in the cloud for each engineer. It is always on and never fails so your computer stays free.
-
-  - Sign up for a free personal (don't use DEV's) account [here](https://customer.elephantsql.com/login). There is a log in with Github option.
-  - Once you have signed in, click the **Create New Instance** button on the top right.
-  - Add a name, probably something like `APP_NAME-db` and keep it on the free `Tiny Turtle` plan. You shouldn't need to add any payment information! Press **Select Region**.
-  - Select the `US-East-1` as the region and press **Review**. and then **Create Instance**.
-  - This should take you back to your list of your created instances (databases). Click on the one you just made.
-  - Under the Details section you should see **Server**, **User & Default database**, and **Password**. These are the credentials you need to connect to the database.
-
-* Connect to the database
-
-  - First, run `cp sample.env .env` in your terminal to create the .env file.
-  - Add all the credentials from ElephantSQL to the corresponding fields in the .env file. It should probably end up looking something like this:
-    <br />
-    <br />
-
-  ```
-  DB_HOST=salt.db.elephantsql.com
-  DB_DATABASE=abcdefgh
-  DB_USER=abcdefgh
-  DB_PASSWORD=abcdefghabcdefghabcdefghabcdefgh
-  DB_PORT=5432
-  NODE_ENV=development
-  ```
 
 ## Project Layout
 
 ### Project Structure
 
-The repo was built by the general frontend web file structure conventions we use at DEV. It has react-router, apollo-client, and ThemeProvider from styled-components set up in src/App.js. It also has a full devloper environment with prettier, eslint, and travis set up.
+The repo was built by the general frontend web file structure conventions we use at DEV. It has react-router, apollo-client, and ThemeProvider from styled-components set up in src/App.js.
 
-This repository was designed first and foremost to scale to large projects. It should be easy to extend the base file structure and setup here to much larger projects.
 
 ```
 project-repo-name
 └───.github
 |
 └───node_modules
+|
+└───data
 │
 └───src
 │   │   cleanup.js
@@ -69,24 +37,22 @@ project-repo-name
 │   |
 │   └───db
 │   |   └───migrations
-│   |   └───helpers.js
+│   |   └───seeds
 │   │
 │   └───graphql
-│   |   └───index.js
+│   |   └───resolvers.js
 │   |   └───router.js
 │   |   └───typeDefs.js
-│   |   └───types
-│   |       └───Mutation
-│   |       └───Query
+│   |   └───Mutation
+│   |   └───Query
 │   |
 │   └───lib
+│   |   └───auth
+│   |   └───context
+│   |   └───cronjob
+│   |   └───formatError
 │   |   └───knex
-│   |   └───logger
-│   |   └───passwords
-│   |   └───sentry
-│   |   └───tokens
-│   |   └───utils
-│   |   └───viewEngine
+│   |   └───permissions
 │   |
 │   └───models
 │       └───BaseModel.js
@@ -96,7 +62,6 @@ project-repo-name
 |   .env
 |   .eslintrc.json
 |   .gitignore
-|   .prettierrc
 |   knexfile.js
 |   nodemon.json
 |   package-lock.json
@@ -124,7 +89,7 @@ project-repo-name
 
 - **.env**
 
-  - Here is where all the sensitive environment variables that are referenced by the config live. An updated version of this file should be kept pinned in the project's Slack channel.
+  - Here is where all the sensitive environment variables that are referenced by the config live.
 
 - **migrations**
 
@@ -134,13 +99,13 @@ project-repo-name
 
   - Here is the GraphQL TypeDefs.
 
-- **graphql/types**
+- **graphql/Mutation & graphql/Query**
 
   - Under the Mutation and Query folders are all the resolvers. What is here corresponds directly to what is in the TypeDefs.
 
 - **graphql/router.js**
 
-  - Here is where the GraphQL router is set up. It handles all the network requests. If you need to apply any middleware, like GraphQL Shield, it should be done here. It is also here that you can intercept the HTTP headers of any request and set the context that is passed to resolvers.
+  - Here is where the GraphQL router is set up. It handles all the network requests. If you need to apply any middleware. it should be done here.
 
 - **lib**
 
@@ -150,23 +115,29 @@ project-repo-name
 
   - This is where all the Objection models are kept. Make sure to keep this in sync with any changes to the migrations.
 
-## Testing
+## Set up a development environment
 
-This project features extensive backend testing with Jest.js. To set this up, you will need to create a new database special for testing:
+- To make development easier, we will use ElephantSQL's free plan to host a different database in the cloud for each engineer. It is always on and never fails so your computer stays free.
 
-```bash
-npm run setup-test-db
-npm run db
-```
+  - Sign up for a free personal account [here](https://customer.elephantsql.com/login). There is also a log in with Github option.
+  - Once you have signed in, click the **Create New Instance** button on the top right.
+  - Add a name, probably something like `app-name-db` and keep it on the free `Tiny Turtle` plan. You shouldn't need to add any payment information! Press **Select Region**.
+  - Select the `US-East-1` as the region and press **Review**. and then **Create Instance**.
+  - This should take you back to your list of your created instances (databases). Click on the one you just made.
+  - Under the Details section you should see **Server**, **User & Default database**, and **Password**. These are the credentials you need to connect to the database.
 
-Once in postgres, run:
+* Connect to the database
 
-```bash
-\i test/scripttest.sql
-```
+  - Run `cp sample.env .env` in your terminal to create the .env file.
+  - Add all the credentials from ElephantSQL to the corresponding fields in the .env file. It should probably end up looking something like this:
+    <br />
+    <br />
 
-To test the app, run
-
-```
-npm run test
-```
+  ```
+  DB_HOST=salt.db.elephantsql.com
+  DB_DATABASE=abcdefgh
+  DB_USER=abcdefgh
+  DB_PASSWORD=abcdefghabcdefghabcdefghabcdefgh
+  DB_PORT=5432
+  NODE_ENV=development
+  ```

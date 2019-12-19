@@ -9,9 +9,7 @@ const config = require('../config')
  * @returns {Promise<string>}
  */
 
-const createToken = payload => jwt.sign(payload, config.tokenSecret, {
-  expiresIn: config.tokenLifetime,
-})
+const createToken = payload => jwt.sign(payload, config.tokenSecret)
 
 /**
  *
