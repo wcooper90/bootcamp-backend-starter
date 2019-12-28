@@ -1,19 +1,16 @@
 {
-  "name": "backend-template",
+  "name": "bootcamp-backend-starter",
   "version": "1.0.0",
   "private": true,
   "description": "Backend template repository for HSA DEV",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint \"src/**/*.js\" \"test/**/*.js\"",
+    "lint": "eslint \"src/**/*.js\"",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "migrate:latest": "npx knex migrate:latest",
     "migrate:rollback": "npx knex migrate:rollback",
     "seed": "npx knex seed:run",
-    "setup-test-db": "createdb startertest",
-    "db": "psql -U admin postgres",
-    "test": "jest --verbose --coverage",
     "copy-env": "cp sample.env .env"
   },
   "repository": {
