@@ -1,19 +1,13 @@
 const { ApolloServer, makeExecutableSchema } = require('apollo-server-express')
-const { applyMiddleware } = require('graphql-middleware')
 const resolvers = require('./resolvers')
 const typeDefs = require('./typeDefs')
 const context = require('../lib/context')
 const formatError = require('../lib/formatError')
-const permissions = require('../lib/permissions')
 
-const baseSchema = makeExecutableSchema({
+const schema = makeExecutableSchema({
   typeDefs,
   resolvers,
 })
-const schema = applyMiddleware(
-  baseSchema,
-  permissions,
-)
 
 const initializeGraphqlRouter = app => {
   const server = new ApolloServer({
