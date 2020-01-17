@@ -14,7 +14,8 @@ exports.up = async knex => createTableIfNotExists(knex, 'users', table => {
 
   table.string('password').notNullable()
 
-  table.timestamps(true)
+  table.timestamp('createdAt').defaultTo(knex.fn.now())
+  table.timestamp('updatedAt').defaultTo(knex.fn.now())
 })
 
 exports.down = async knex => knex.schema.dropTableIfExists('users')
