@@ -5,7 +5,7 @@ casual.define('message', (senderId, receiverId) => ({
   id: casual.uuid,
   senderId,
   receiverId,
-  dateSent: casual.date(),
+  createdAt: casual.moment,
   content: casual.text,
 }))
 
