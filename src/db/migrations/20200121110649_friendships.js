@@ -21,7 +21,7 @@ exports.up = async knex => knex.schema.createTable('friendships', table => {
     .onUpdate('CASCADE')
 
   table
-    .enum('status', ['ACCEPTED', 'PENDING', 'REQUESTED'])
+    .enum('status', ['ACCEPTED', 'PENDING', 'DECLINED'])
 })
 
 exports.down = async knex => knex.schema.dropTableIfExists('friendships')

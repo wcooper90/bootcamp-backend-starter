@@ -1,7 +1,7 @@
 const casual = require('casual')
 const userData = require('./user')
 
-const statusArray = ['ACCEPTED', 'PENDING', 'REQUESTED']
+const statusArray = ['ACCEPTED', 'PENDING', 'DECLINED']
 
 
 casual.define('friendship', (requestorId, requesteeId, status) => ({
