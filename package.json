@@ -44,6 +44,7 @@
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.20.2",
     "lodash.merge": "^4.6.2",
+    "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "objection": "^1.6.11",
     "pg": "^7.14.0",
