@@ -1,40 +1,40 @@
 /* eslint-disable global-require */
-const { OneToManyRelation, HasManyRelation } = require('objection')
+const { OneToManyRelation, HasManyRelation, ManyToManyRelation } = require('objection')
 const BaseModel = require('./BaseModel')
 
 class User extends BaseModel {
   static get tableName() {
     return 'users'
   }
-  
+
   static get relationMappings() {
-    const Message = require('./Messages')
-    const Journal = require('./Journal')
+    const Message = require('./Message')
+    const JournalEntry = require('./JournalEntry')
 
     return {
       requestedFriend: {
-        relation: OneToManyRelation,
+        relation: ManyToManyRelation,
         modelClass: User,
         join: {
-          from: 'user.id',
+          from: 'users.id',
           through: {
-            from: 'friends.requestorId',
-            to: 'friends. requesteeId',
+            from: 'friendships.requestorId',
+            to: 'friendships.requesteeId',
           },
-          to: 'user.id',
+          to: 'users.id',
         },
       },
 
       requestingFriend: {
-        relation: OneToManyRelation,
+        relation: ManyToManyRelation,
         modelClass: User,
         join: {
-          from: 'user.id',
+          from: 'users.id',
           through: {
-            from: 'friends.requesteeId',
-            to: 'firends. requestorId',
+            from: 'friendships.requesteeId',
+            to: 'friendships.requestorId',
           },
-          to: 'user.id',
+          to: 'users.id',
         },
       },
 
@@ -56,9 +56,9 @@ class User extends BaseModel {
         },
       },
 
-      JournalEntry: {
+      journalEntries: {
         relation: HasManyRelation,
-        modelClass: Journal,
+        modelClass: JournalEntry,
         join: {
           from: 'users.id',
           to: 'journal.userId',

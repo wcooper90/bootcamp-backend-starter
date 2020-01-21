@@ -9,9 +9,9 @@ const viewer = async (obj, args, { user }) => {
   throw new Error('Unauthenticated. Please login to access CheerMeUp.')
 }
 
-const userResolver = async (obj, { userId }) => {
+const userResolver = async (obj, { id }) => {
   try {
-    const u = await User.query().findById(userId)
+    const u = await User.query().findById(id)
 
     return u
   } catch (err) {
@@ -32,12 +32,13 @@ const users = async () => {
 }
 
 const searchUsers = async (obj, { searchText }, { user }) => {
+  // Note: comment out this error check if user auth has not been set up yet
   if (!user) {
     throw new Error('Unauthenticated. Please login to access CheerMeUp.')
   }
 
   try {
-    const u = await User.query().where('firstName', 'like', `%${searchText}%`).orWhere('lastName', 'like', `%${searchText}%`)
+    const u = await User.query().where('firstName', 'ilike', `%${searchText}%`).orWhere('lastName', 'ilike', `%${searchText}%`)
     return u
   } catch (err) {
     console.log(err)
@@ -45,15 +46,15 @@ const searchUsers = async (obj, { searchText }, { user }) => {
   }
 }
 
-const friends = async ({ userId }) => {
+const friends = async ({ id }) => {
   try {
     const allFriends = await User.query().whereExists(
-      User.relatedQuery('requestedFriend')
-        .where('requestorId', userId)
+      User.relatedQuery('requestingFriend')
+        .where('requestorId', id)
         .andWhere('status', 'ACCEPTED'),
     ).orWhereExists(
-      User.relatedQuery('requestingFriend')
-        .where('requesteeId', userId)
+      User.relatedQuery('requestedFriend')
+        .where('requesteeId', id)
         .andWhere('status', 'ACCEPTED'),
     )
 
@@ -64,11 +65,11 @@ const friends = async ({ userId }) => {
   }
 }
 
-const friendRequests = async ({ userId }) => {
+const friendRequests = async ({ id }) => {
   try {
     const r = await User.query().whereExists(
-      User.relatedQuery('requestingFriend')
-        .where('requesteeId', userId)
+      User.relatedQuery('requestedFriend')
+        .where('requesteeId', id)
         .andWhere('status', 'PENDING'),
     )
 
@@ -79,9 +80,9 @@ const friendRequests = async ({ userId }) => {
   }
 }
 
-const journalEntries = async ({ userId }) => {
+const journalEntries = async ({ id }) => {
   try {
-    const j = await JournalEntry.query().where('userId', userId)
+    const j = await JournalEntry.query().where('userId', id)
 
     return j
   } catch (err) {
@@ -90,9 +91,9 @@ const journalEntries = async ({ userId }) => {
   }
 }
 
-const messagesSent = async ({ userId }) => {
+const messagesSent = async ({ id }) => {
   try {
-    const m = await Message.query().where('senderId', userId)
+    const m = await Message.query().where('senderId', id)
 
     return m
   } catch (err) {
@@ -101,9 +102,9 @@ const messagesSent = async ({ userId }) => {
   }
 }
 
-const messagesReceived = async ({ userId }) => {
+const messagesReceived = async ({ id }) => {
   try {
-    const m = await Message.query().where('receiverId', userId)
+    const m = await Message.query().where('receiverId', id)
 
     return m
   } catch (err) {
@@ -129,3 +130,34 @@ const resolver = {
 }
 
 module.exports = resolver
+
+// Example query
+
+// query ($id: ID!) {
+//   user(id: $id) {
+//     firstName
+//     lastName
+//     dob
+//     email
+//     friends {
+//       firstName
+//       lastName
+//       email
+//     }
+//     friendRequests {
+//       firstName
+//       lastName
+//       email
+//     }
+//     journalEntries {
+//       date
+//       text
+//     }
+//     messagesSent {
+//       content
+//     }
+//     messagesReceived {
+//       content
+//     }
+//   }
+// }

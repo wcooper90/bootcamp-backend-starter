@@ -24,11 +24,11 @@ module.exports = gql`
     firstName: String!
     lastName: String!
     dob: String!
-    friends: [User!]!
-    friendRequests: [User!]!
-    journalEntries: [JournalEntry!]!
-    messagesReceived: [Message!]!
-    messagesSent: [Message!]!
+    friends: [User!]
+    friendRequests: [User!]
+    journalEntries: [JournalEntry!]
+    messagesReceived: [Message!]
+    messagesSent: [Message!]
   }
 
   type JournalEntry {

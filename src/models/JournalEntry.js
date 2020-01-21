@@ -4,7 +4,7 @@ const BaseModel = require('./BaseModel')
 
 class JournalEntry extends BaseModel {
   static get tableName() {
-    return 'journal'
+    return 'journalEntries'
   }
 
   static get relationMappings() {
@@ -15,8 +15,8 @@ class JournalEntry extends BaseModel {
         relation: OneToOneRelation,
         modelClass: User,
         join: {
-          from: 'journal.userId',
-          to: 'user.id',
+          from: 'journalEntries.userId',
+          to: 'users.id',
         },
       },
     }

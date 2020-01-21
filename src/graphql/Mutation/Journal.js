@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import moment from 'moment'
+const moment = require('moment')
 
 const JournalEntry = require('../../models/JournalEntry')
 
