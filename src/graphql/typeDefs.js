@@ -33,7 +33,7 @@ module.exports = gql`
 
   type JournalEntry {
     id: ID!
-    userId: User!
+    userId: ID!
     date: String!
     text: String!
   }

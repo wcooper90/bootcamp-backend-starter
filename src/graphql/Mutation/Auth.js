@@ -10,12 +10,12 @@ const login = async (obj, { email, password }) => {
     email,
   })
   if (!user) {
-    throw new UserInputError('Invalid email or password')
+    throw new UserInputError('Invalid email or password. Please try again.')
   }
 
   const validPassword = await comparePassword(password, user.password)
   if (!validPassword) {
-    throw new UserInputError('Invalid email or password')
+    throw new UserInputError('Invalid email or password. Please try again.')
   }
 
 
