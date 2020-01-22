@@ -4,6 +4,7 @@ const JournalEntry = require('../../models/JournalEntry')
 const Message = require('../../models/Message')
 
 const viewer = async (obj, args, { user }) => {
+  console.log(user)
   if (user) return user
 
   throw new Error('Unauthenticated. Please login to access CheerMeUp.')
