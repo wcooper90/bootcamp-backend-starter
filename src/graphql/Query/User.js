@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+const moment = require('moment')
+
 const User = require('../../models/User')
 const JournalEntry = require('../../models/JournalEntry')
 const Message = require('../../models/Message')
@@ -38,8 +40,12 @@ const searchUsers = async (obj, { searchText }, { user }) => {
     throw new Error('Unauthenticated. Please login to access CheerMeUp.')
   }
 
+  if (searchText === '') {
+    return []
+  }
+
   try {
-    const u = await User.query().where('firstName', 'ilike', `%${searchText}%`).orWhere('lastName', 'ilike', `%${searchText}%`)
+    const u = await User.query().where('firstName', 'ilike', `%${searchText}%`).orWhere('lastName', 'ilike', `${searchText}%`)
     return u
   } catch (err) {
     console.log(err)
@@ -83,12 +89,24 @@ const friendRequests = async ({ id }) => {
 
 const journalEntries = async ({ id }) => {
   try {
-    const j = await JournalEntry.query().where('userId', id)
+    const j = await JournalEntry.query().where('userId', id).whereNot('date', moment().format('YYYY-MM-DD'))
 
     return j
   } catch (err) {
     console.log(err)
     throw new Error('Unable to fetch journal entries.')
+  }
+}
+
+const currentJournalEntry = async ({ id }) => {
+  try {
+    const today = moment().format('YYYY-MM-DD')
+    const j = await JournalEntry.query().where('userId', id).andWhere('date', today)
+
+    return j[0]
+  } catch (err) {
+    console.log(err)
+    throw new Error('Unable to fetch current journal entry.')
   }
 }
 
@@ -125,6 +143,7 @@ const resolver = {
     friends,
     friendRequests,
     journalEntries,
+    currentJournalEntry,
     messagesSent,
     messagesReceived,
   },

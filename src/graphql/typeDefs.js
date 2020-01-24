@@ -6,7 +6,7 @@ module.exports = gql`
     register(input: RegisterInput!): AuthReturn!
     sendMessage(input: MessageInput!): Message!
     addJournalEntry(text: String!): JournalEntry!
-    editJournalEntry(entryId: ID!, text: String!): JournalEntry!
+    editJournalEntry(entryId: ID, text: String!): JournalEntry!
     sendFriendRequest(requesteeId: ID!): Friendship!
     resolveFriendRequest(requestorId: ID!, acceptedOrDeclined: String!): Friendship!
   }
@@ -27,6 +27,7 @@ module.exports = gql`
     friends: [User!]
     friendRequests: [User!]
     journalEntries: [JournalEntry!]
+    currentJournalEntry: JournalEntry
     messagesReceived: [Message!]
     messagesSent: [Message!]
   }
