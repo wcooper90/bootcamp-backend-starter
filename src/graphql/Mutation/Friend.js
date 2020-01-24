@@ -28,14 +28,14 @@ const resolveFriendRequest = async (obj, { requestorId, acceptedOrDeclined }, { 
   try {
     const friendship = await Friendship.query().where('requestorId', requestorId).andWhere('requesteeId', user.id)
 
-    const resolvedFriendship = friendship.$query().patchAndFetch({
+    const resolvedFriendship = friendship[0].$query().patchAndFetch({
       status: acceptedOrDeclined, // 'ACCEPTED' || 'DECLINED'
     })
 
     return resolvedFriendship
   } catch (err) {
     console.log(err)
-    throw new Error('Unable to accept friend request.')
+    throw new Error('Unable to accept/decline friend request.')
   }
 }
 

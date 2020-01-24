@@ -27,15 +27,30 @@ const editJournalEntry = async (obj, { entryId, text }, { user }) => {
     throw new Error('Unauthenticated. Please log in to add a journal entry.')
   }
 
-  try {
-    const j = await JournalEntry.query().patchAndFetchById(entryId, {
-      text,
-    })
+  if (entryId === null) {
+    try {
+      const j = await JournalEntry.query().insertAndFetch({
+        text,
+        userId: user.id,
+        date: moment().format('YYYY-MM-DD'),
+      })
 
-    return j
-  } catch (err) {
-    console.log(err)
-    throw new Error('Unable to add journal entry.')
+      return j
+    } catch (err) {
+      console.log(err)
+      throw new Error('Unable to add journal entry.')
+    }
+  } else {
+    try {
+      const j = await JournalEntry.query().patchAndFetchById(entryId, {
+        text,
+      })
+
+      return j
+    } catch (err) {
+      console.log(err)
+      throw new Error('Unable to add journal entry.')
+    }
   }
 }
 
