@@ -2,13 +2,16 @@
 const Message = require('../../models/Message')
 
 const sendMessage = async (obj, {
-  input: { content, senderId, receiverId },
+  input: {
+    content, senderId, receiverId, createdAt,
+  },
 }) => {
   try {
     const message = await Message.query().insertAndFetch({
       content,
       senderId,
       receiverId,
+      createdAt,
     })
 
     return message

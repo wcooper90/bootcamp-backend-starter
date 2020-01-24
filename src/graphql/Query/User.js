@@ -114,6 +114,24 @@ const messagesReceived = async ({ id }) => {
   }
 }
 
+const getSender = async ({ senderId }) => {
+  const sender = await User.query().findById(senderId)
+
+  return sender
+}
+
+const getReceiver = async ({ receiverId }) => {
+  const receiver = await User.query().findById(receiverId)
+
+  return receiver
+}
+
+// const getDate = async ({ receiverId }) => {
+//   const date = await Message.query().findById(receiverId)
+
+//   return date
+// }
+
 const resolver = {
   Query: {
     viewer,
@@ -121,12 +139,19 @@ const resolver = {
     users,
     searchUsers,
   },
+
   User: {
     friends,
     friendRequests,
     journalEntries,
     messagesSent,
     messagesReceived,
+  },
+
+  Message: {
+    // dateSent: getDate,
+    sender: getSender,
+    receiver: getReceiver,
   },
 }
 

@@ -14,7 +14,7 @@ const addJournalEntry = async (obj, { text }, { user }) => {
       userId: user.id,
       date: moment().format('YYYY-MM-DD'),
     })
-
+    console.log('finna return this journal entry')
     return j
   } catch (err) {
     console.log(err)
