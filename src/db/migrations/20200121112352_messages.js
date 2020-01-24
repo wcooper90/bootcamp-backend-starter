@@ -21,7 +21,7 @@ exports.up = async knex => knex.schema.createTable('messages', table => {
     .onUpdate('CASCADE')
 
   table
-    .timestamp('createdAt').defaultTo(knex.fn.now())
+    .date('dateSent')
     .notNullable()
 
   table

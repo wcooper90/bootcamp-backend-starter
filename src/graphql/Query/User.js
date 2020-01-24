@@ -124,6 +124,7 @@ const messagesSent = async ({ id }) => {
 const messagesReceived = async ({ id }) => {
   try {
     const m = await Message.query().where('receiverId', id)
+    console.log(m)
 
     return m
   } catch (err) {
@@ -143,6 +144,20 @@ const getReceiver = async ({ receiverId }) => {
 
   return receiver
 }
+
+/*
+const dateSent = async ({ id }) => {
+  console.log(id)
+  try {
+    const m = await Message.query().select('dateSent').where('senderId', id)
+    console.log(m)
+
+    return m
+  } catch (err) {
+    console.log(err)
+    throw new Error('Unable to fetch messages.')
+  }
+} */
 
 // const getDate = async ({ receiverId }) => {
 //   const date = await Message.query().findById(receiverId)
@@ -168,7 +183,7 @@ const resolver = {
   },
 
   Message: {
-    // dateSent: getDate,
+    // dateSent,
     sender: getSender,
     receiver: getReceiver,
   },
